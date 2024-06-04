@@ -38,7 +38,7 @@ class WarGame
     if winning_player == :tie
       tied_cards << p1_card << p2_card
       puts "It's a tie! Cards go to tied pool."
-      play_round
+      play_round until game_over?
     else
       winning_player.take([p1_card, p2_card] + tied_cards)
       tied_cards.clear

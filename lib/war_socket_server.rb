@@ -33,6 +33,8 @@ class WarSocketServer
       game = WarGame.new(*pending_clients.values)
       games << game
       pending_clients.clear
+    else
+      pending_clients.keys.first.puts("Waiting for more players")
     end
   end
 
