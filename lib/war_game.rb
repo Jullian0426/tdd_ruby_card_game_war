@@ -35,11 +35,8 @@ class WarGame
       tied_cards << p2_card
       puts "It's a tie! Cards go to tied pool."
     else
-      round_winner.take(p1_card)
-      round_winner.take(p2_card)
-      tied_cards.each do |card|
-        round_winner.take(card)
-      end
+      round_winner.take([p1_card, p2_card])
+      round_winner.take(tied_cards)
       tied_cards.clear
       puts "#{round_winner.name} wins this round."
     end

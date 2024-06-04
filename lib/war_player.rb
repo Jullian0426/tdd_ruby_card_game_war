@@ -6,8 +6,10 @@
     @cards = []
   end
 
-  def take(card)
-    cards.push(card)
+  def take(taken_cards)
+    taken_cards = [taken_cards] unless taken_cards.is_a?(Array)
+    taken_cards.shuffle!
+    cards.push(*taken_cards)
   end
 
   def play
