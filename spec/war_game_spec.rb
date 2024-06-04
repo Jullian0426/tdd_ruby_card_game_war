@@ -62,37 +62,36 @@ describe 'WarGame' do
       expect(player2.cards.size).to eq 0
     end
 
+    let(:winning_card) { PlayingCard.new('A', 'H') }
+    let(:losing_card) { PlayingCard.new('2', 'H') }
+    let(:player1) { WarPlayer.new("Player 1") }
+    let(:player2) { WarPlayer.new("Player 2") }
+    let(:game) { WarGame.new(player1, player2) }
+
     before do
-      @winning_card = PlayingCard.new('A', 'H')
-      @losing_card = PlayingCard.new('2', 'H')
-
-      @player1 = WarPlayer.new("Player 1")
-      @player1.take(@winning_card)
-      @player2 = WarPlayer.new("Player 2")
-      @player2.take(@losing_card)
-
-      @game = WarGame.new(@player1, @player2)
+      player1.take(winning_card)
+      player2.take(losing_card)
     end
 
     it 'should return player1 if player1 wins' do
-      p1_rank = @player1.play.rank
-      p2_rank = @player2.play.rank
-      result = @game.compare_ranks(p1_rank, p2_rank)
+      p1_rank = player1.play.rank
+      p2_rank = player2.play.rank
+      result = game.compare_ranks(p1_rank, p2_rank)
 
-      expect(result).to eq @player1
+      expect(result).to eq player1
     end
     
     it 'should give player1 both cards when they win the round' do
-      @game.play_round
+      game.play_round
 
-      expect(@player1.cards.size).to eq 2
-      expect(@player2.cards.size).to eq 0
+      expect(player1.cards.size).to eq 2
+      expect(player2.cards.size).to eq 0
     end
 
     it 'should declare winner if a player has no cards' do
-      @game.play_round
+      game.play_round
 
-      expect(@game.winner).to eq @player1
+      expect(game.winner).to eq player1
     end
   end
 end
