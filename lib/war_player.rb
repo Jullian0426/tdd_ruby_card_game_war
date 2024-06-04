@@ -1,9 +1,10 @@
  class WarPlayer
   attr_accessor :name, :cards
   
-  def initialize(name)
+  def initialize(name, client = nil)
     @name = name
     @cards = []
+    @client = client
   end
 
   def take(taken_cards)

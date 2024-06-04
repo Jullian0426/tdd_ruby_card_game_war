@@ -42,7 +42,7 @@ describe WarSocketServer do
     expect {MockWarSocketClient.new(@server.port_number)}.to raise_error(Errno::ECONNREFUSED)
   end
 
-  xit "accepts new clients and starts a game if possible" do
+  it "accepts new clients and starts a game if possible" do
     @server.start
     client1 = MockWarSocketClient.new(@server.port_number)
     @clients.push(client1)
