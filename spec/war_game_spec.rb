@@ -56,7 +56,6 @@ describe 'WarGame' do
 
       game = WarGame.new(player1, player2)
       game.play_round
-      game.play_round
 
       expect(player1.cards.size).to eq 4
       expect(player2.cards.size).to eq 0

@@ -34,6 +34,7 @@ class WarGame
       tied_cards << p1_card
       tied_cards << p2_card
       puts "It's a tie! Cards go to tied pool."
+      play_round
     else
       round_winner.take([p1_card, p2_card])
       round_winner.take(tied_cards)
@@ -48,6 +49,7 @@ class WarGame
     end
   end
 
+  # TODO: Move compare_ranks to WarPlayer
   def test_compare_ranks(rank1, rank2)
     compare_ranks(rank1, rank2)
   end

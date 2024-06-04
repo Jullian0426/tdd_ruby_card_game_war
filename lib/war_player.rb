@@ -7,8 +7,7 @@
   end
 
   def take(taken_cards)
-    taken_cards = [taken_cards] unless taken_cards.is_a?(Array)
-    taken_cards.shuffle!
+    taken_cards.shuffle! if taken_cards.respond_to? :shuffle
     cards.push(*taken_cards)
   end
 
