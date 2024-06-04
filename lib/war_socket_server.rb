@@ -3,11 +3,12 @@ require_relative 'war_game'
 require_relative 'war_player'
 
 class WarSocketServer
-  attr_accessor :players, :games
+  attr_accessor :users, :games, :pending_clients
 
   def initialize
-    @players = []
+    @users = {}
     @games = []
+    @pending_clients = []
   end
 
   def port_number
@@ -20,15 +21,19 @@ class WarSocketServer
 
   def accept_new_client(player_name = "Random Player")
     client = @server.accept_nonblock
-    # associate player and client
-    self.players << WarPlayer.new(player_name, client)
+    player = WarPlayer.new(player_name)
+    pending_clients << client
+    users[client] = player
   rescue IO::WaitReadable, Errno::EINTR
     puts "No client to accept"
   end
 
   def create_game_if_possible
-    if players.size >= 2
-      games << WarGame.new(*players)
+    if users.size >= 2
+      players = pending_clients.map { |client| users[client] }
+      game = WarGame.new(*players)
+      games << game
+      pending_clients.clear
     end
   end
 

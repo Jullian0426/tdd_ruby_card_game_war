@@ -1,6 +1,7 @@
 require_relative 'card_deck'
 require_relative 'war_player'
 
+# TODO: Remove hardcoding for 2 players
 class WarGame
   attr_accessor :player1, :player2, :deck, :winner, :tied_cards
 
