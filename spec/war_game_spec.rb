@@ -3,10 +3,8 @@ require_relative '../lib/war_game'
 describe 'WarGame' do
   describe '#initialize' do
     it 'should initialize with players and deck' do
-      player1 = WarPlayer.new("Player 1")
-      player2 = WarPlayer.new("Player 2")
 
-      game = WarGame.new(player1, player2)
+      game = WarGame.new
 
       expect(game).to respond_to :player1
       expect(game).to respond_to :player2
@@ -16,26 +14,20 @@ describe 'WarGame' do
 
   describe '#start' do
     it 'should shuffle the deck' do
-      player1 = WarPlayer.new("Player 1")
-      player2 = WarPlayer.new("Player 2")
-
-      game1 = WarGame.new(player1, player2)
-      game2 = WarGame.new(player1, player2)
+      game1 = WarGame.new
+      game2 = WarGame.new
       game2.start
 
       expect(game2.deck.cards).to_not eq game1.deck.cards
     end
 
     it 'should deal cards to each player until deck is empty' do
-      player1 = WarPlayer.new("Player 1")
-      player2 = WarPlayer.new("Player 2")
-
-      game = WarGame.new(player1, player2)
+      game = WarGame.new
       half_of_deck = (game.deck.cards_left / 2).floor
       game.start
 
-      expect(player1.cards.size).to eq half_of_deck
-      expect(player1.cards.size).to eq half_of_deck
+      expect(game.player1.cards.size).to eq half_of_deck
+      expect(game.player2.cards.size).to eq half_of_deck
       expect(game.deck.cards_left).to eq 0
     end
   end
@@ -48,11 +40,9 @@ describe 'WarGame' do
       card4 = PlayingCard.new('3', 'D')
 
       player1 = WarPlayer.new("Player 1")
-      player1.take(card1)
-      player1.take(card3)
+      player1.cards = [card1, card3]
       player2 = WarPlayer.new("Player 2")
-      player2.take(card2)
-      player2.take(card4)
+      player2.cards = [card2, card4]
 
       game = WarGame.new(player1, player2)
       game.play_round
@@ -63,26 +53,24 @@ describe 'WarGame' do
 
     let(:winning_card) { PlayingCard.new('A', 'H') }
     let(:losing_card) { PlayingCard.new('2', 'H') }
-    let(:player1) { WarPlayer.new("Player 1") }
-    let(:player2) { WarPlayer.new("Player 2") }
-    let(:game) { WarGame.new(player1, player2) }
+    let(:game) { WarGame.new }
 
     before do
-      player1.take(winning_card)
-      player2.take(losing_card)
+      game.player1.take(winning_card)
+      game.player2.take(losing_card)
     end
     
     it 'should give player1 both cards when they win the round' do
       game.play_round
 
-      expect(player1.cards.size).to eq 2
-      expect(player2.cards.size).to eq 0
+      expect(game.player1.cards.size).to eq 2
+      expect(game.player2.cards.size).to eq 0
     end
 
     it 'should declare winner if a player has no cards' do
       game.play_round
 
-      expect(game.winner).to eq player1
+      expect(game.winner).to eq game.player1
     end
   end
 end
