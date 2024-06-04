@@ -8,7 +8,7 @@ class WarSocketServer
   def initialize
     @users = {}
     @games = []
-    @pending_clients = []
+    @pending_clients = {}
   end
 
   def port_number
@@ -22,7 +22,7 @@ class WarSocketServer
   def accept_new_client(player_name = "Random Player")
     client = @server.accept_nonblock
     player = WarPlayer.new(player_name)
-    pending_clients << client
+    pending_clients[client] = player
     users[client] = player
   rescue IO::WaitReadable, Errno::EINTR
     puts "No client to accept"
@@ -30,8 +30,7 @@ class WarSocketServer
 
   def create_game_if_possible
     if users.size >= 2
-      players = pending_clients.map { |client| users[client] }
-      game = WarGame.new(*players)
+      game = WarGame.new(*pending_clients.values)
       games << game
       pending_clients.clear
     end
