@@ -51,6 +51,12 @@ class WarGame
     end
   end
 
+  def test_compare_ranks(rank1, rank2)
+    compare_ranks(rank1, rank2)
+  end
+
+  private
+
   def compare_ranks(rank1, rank2)
     ranks = %w(2 3 4 5 6 7 8 9 10 J Q K A)
     rank1_index = ranks.index(rank1)
