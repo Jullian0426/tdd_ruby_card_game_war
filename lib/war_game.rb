@@ -20,35 +20,32 @@ class WarGame
     end
   end
 
-  #TODO: Refactor for 7 line constraint
   def play_round
-    p1_card = player1.play
-    p2_card = player2.play
+    p1_card, p2_card = player1.play, player2.play
+    puts "Player 1 plays #{p1_card.rank} of #{p1_card.suit}\nPlayer 2 plays #{p2_card.rank} of #{p2_card.suit}"
+    winning_player = round_winner(p1_card, p2_card)
+    round_handler(winning_player, p1_card, p2_card)
+    game_over?
+  end
 
-    puts "Player 1 plays #{p1_card.rank} of #{p1_card.suit}"
-    puts "Player 2 plays #{p2_card.rank} of #{p2_card.suit}"
-    
-    comparison = p1_card.beat?(p2_card)
-    if comparison == true
-      round_winner = player1
-    elsif comparison == false
-      round_winner = player2
-    else
-      round_winner = :tie
-    end
+  def round_winner(p1_card, p2_card)
+    result = p1_card.beat?(p2_card)
+    result == true ? player1 : (result == false ? player2 : :tie)
+  end
 
-    if round_winner == :tie
-      tied_cards << p1_card
-      tied_cards << p2_card
+  def round_handler(winning_player, p1_card, p2_card)
+    if winning_player == :tie
+      tied_cards << p1_card << p2_card
       puts "It's a tie! Cards go to tied pool."
       play_round
     else
-      round_winner.take([p1_card, p2_card])
-      round_winner.take(tied_cards)
+      winning_player.take([p1_card, p2_card] + tied_cards)
       tied_cards.clear
-      puts "#{round_winner.name} wins this round."
+      puts "#{winning_player.name} wins this round."
     end
+  end
 
+  def game_over?
     if player1.cards.size == 0
       @winner = player2
     elsif player2.cards.size == 0
