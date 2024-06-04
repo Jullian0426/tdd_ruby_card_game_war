@@ -13,4 +13,15 @@ describe 'PlayingCard' do
       expect(card1).to_not eq card4
     end
   end
+
+  describe '#beat_card?' do
+    let(:winning_card) { PlayingCard.new('A', 'H') }
+    let(:losing_card) { PlayingCard.new('2', 'H') }
+
+    it "should return true if higher rank" do
+      result = winning_card.beat?(losing_card)
+
+      expect(result).to eq true
+    end
+  end
 end

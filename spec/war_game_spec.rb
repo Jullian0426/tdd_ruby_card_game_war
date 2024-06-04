@@ -71,16 +71,6 @@ describe 'WarGame' do
       player1.take(winning_card)
       player2.take(losing_card)
     end
-
-    describe '#compare_ranks' do
-      it 'should return player1 if player1 wins' do
-        p1_rank = player1.play.rank
-        p2_rank = player2.play.rank
-        result = game.test_compare_ranks(p1_rank, p2_rank)
-
-        expect(result).to eq player1
-      end
-    end
     
     it 'should give player1 both cards when they win the round' do
       game.play_round

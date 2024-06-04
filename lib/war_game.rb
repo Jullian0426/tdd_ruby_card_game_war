@@ -1,4 +1,5 @@
 require_relative 'card_deck'
+require_relative 'war_player'
 
 class WarGame
   attr_accessor :player1, :player2, :deck, :winner, :tied_cards
@@ -17,11 +18,9 @@ class WarGame
       player1.take(deck.deal)
       player2.take(deck.deal)
     end
-
-    puts "Player 1 starts with #{player1.cards.size} cards."
-    puts "Player 2 starts with #{player2.cards.size} cards."
   end
 
+  #TODO: Refactor for 7 line constraint
   def play_round
     p1_card = player1.play
     p2_card = player2.play
@@ -29,7 +28,15 @@ class WarGame
     puts "Player 1 plays #{p1_card.rank} of #{p1_card.suit}"
     puts "Player 2 plays #{p2_card.rank} of #{p2_card.suit}"
     
-    round_winner = compare_ranks(p1_card.rank, p2_card.rank)
+    comparison = p1_card.beat?(p2_card)
+    if comparison == true
+      round_winner = player1
+    elsif comparison == false
+      round_winner = player2
+    else
+      round_winner = :tie
+    end
+
     if round_winner == :tie
       tied_cards << p1_card
       tied_cards << p2_card
@@ -46,27 +53,6 @@ class WarGame
       @winner = player2
     elsif player2.cards.size == 0
       @winner = player1
-    end
-  end
-
-  # TODO: Move compare_ranks to WarPlayer
-  def test_compare_ranks(rank1, rank2)
-    compare_ranks(rank1, rank2)
-  end
-
-  private
-
-  def compare_ranks(rank1, rank2)
-    ranks = %w(2 3 4 5 6 7 8 9 10 J Q K A)
-    rank1_index = ranks.index(rank1)
-    rank2_index = ranks.index(rank2)
-
-    if rank1_index > rank2_index
-      return player1
-    elsif rank2_index > rank1_index
-      return player2
-    else
-      return :tie
     end
   end
 end
