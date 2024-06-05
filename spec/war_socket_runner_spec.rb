@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'spec_helper'
 require_relative '../lib/war_socket_runner'
 require_relative 'war_socket_server_spec'
 
@@ -26,12 +27,12 @@ describe WarSocketRunner do
     client1.capture_output
     @clients.push(client2)
     @server.accept_new_client('Player 2')
-    client2.capture_output
     @game = @server.create_game_if_possible
   end
 
   it 'prompts all players to play a card' do
-    @server.run_game(@game)
+    runner = @server.runner(@game)
+    runner.run_loop
 
     expect(client1.capture_output.chomp).to eq 'Type PLAY to play a card'
     expect(client2.capture_output.chomp).to eq 'Type PLAY to play a card'
@@ -43,6 +44,7 @@ describe WarSocketRunner do
     @game.players[0].cards = [card1]
     @game.players[1].cards = [card2]
     @game.deck.cards.clear
+
     runner = @server.runner(@game)
     runner.run_loop
 
