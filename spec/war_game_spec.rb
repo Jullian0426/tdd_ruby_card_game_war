@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require_relative '../lib/war_game'
 
 describe 'WarGame' do
   describe '#initialize' do
     it 'should initialize with players and deck' do
-
       game = WarGame.new
 
       expect(game).to respond_to :player1
@@ -39,9 +40,9 @@ describe 'WarGame' do
       card3 = PlayingCard.new('6', 'D')
       card4 = PlayingCard.new('3', 'D')
 
-      player1 = WarPlayer.new("Player 1")
+      player1 = WarPlayer.new('Player 1')
       player1.cards = [card1, card3]
-      player2 = WarPlayer.new("Player 2")
+      player2 = WarPlayer.new('Player 2')
       player2.cards = [card2, card4]
 
       game = WarGame.new(player1, player2)
@@ -59,7 +60,7 @@ describe 'WarGame' do
       game.player1.take(winning_card)
       game.player2.take(losing_card)
     end
-    
+
     it 'should give player1 both cards when they win the round' do
       game.play_round
 

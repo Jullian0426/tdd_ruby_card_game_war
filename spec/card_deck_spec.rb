@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/card_deck'
 
 describe 'CardDeck' do

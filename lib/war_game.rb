@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require_relative 'card_deck'
 require_relative 'war_player'
 
-# TODO: Remove hardcoding for 2 players
+# Represents a card game of War
 class WarGame
   attr_accessor :player1, :player2, :players, :deck, :winner, :tied_cards
 
-  def initialize(player1 = WarPlayer.new("Player 1"), player2 = WarPlayer.new("Player 2"), deck = CardDeck.new)
+  def initialize(player1 = WarPlayer.new('Player 1'), player2 = WarPlayer.new('Player 2'), deck = CardDeck.new)
     @player1 = player1
     @player2 = player2
     @deck = deck
@@ -16,14 +18,15 @@ class WarGame
 
   def start
     deck.cards.shuffle!
-    until deck.cards_left == 0 do
+    until deck.cards_left.zero?
       player1.take(deck.deal)
       player2.take(deck.deal)
     end
   end
 
   def play_round
-    p1_card, p2_card = player1.play, player2.play
+    p1_card = player1.play
+    p2_card = player2.play
     puts "Player 1 plays #{p1_card.rank} of #{p1_card.suit}\nPlayer 2 plays #{p2_card.rank} of #{p2_card.suit}"
     winning_player = round_winner(p1_card, p2_card)
     round_handler(winning_player, p1_card, p2_card)
@@ -32,7 +35,11 @@ class WarGame
 
   def round_winner(p1_card, p2_card)
     result = p1_card.beat?(p2_card)
-    result == true ? player1 : (result == false ? player2 : :tie)
+    if result == true
+      player1
+    else
+      (result == false ? player2 : :tie)
+    end
   end
 
   def round_handler(winning_player, p1_card, p2_card)
@@ -48,9 +55,9 @@ class WarGame
   end
 
   def game_over?
-    if player1.cards.size == 0
+    if player1.cards.empty?
       @winner = player2
-    elsif player2.cards.size == 0
+    elsif player2.cards.empty?
       @winner = player1
     end
   end

@@ -1,6 +1,9 @@
- class WarPlayer
+# frozen_string_literal: true
+
+# Represents a player in the game of War.
+class WarPlayer
   attr_accessor :name, :cards
-  
+
   def initialize(name)
     @name = name
     @cards = []
@@ -14,4 +17,4 @@
   def play
     cards.shift
   end
- end
+end

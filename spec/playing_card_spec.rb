@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require_relative '../lib/playing_card'
 
 describe 'PlayingCard' do
-  describe "#==" do
-    it "should only return true if ranks and suits are equivalent" do
+  describe '#==' do
+    it 'should only return true if ranks and suits are equivalent' do
       card1 = PlayingCard.new('2', 'H')
       card2 = PlayingCard.new('2', 'H')
       card3 = PlayingCard.new('3', 'H')
@@ -18,7 +20,7 @@ describe 'PlayingCard' do
     let(:winning_card) { PlayingCard.new('A', 'H') }
     let(:losing_card) { PlayingCard.new('2', 'H') }
 
-    it "should return true if higher rank" do
+    it 'should return true if higher rank' do
       result = winning_card.beat?(losing_card)
 
       expect(result).to eq true
