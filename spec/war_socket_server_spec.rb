@@ -80,6 +80,7 @@ describe WarSocketServer do
       @clients.push(client1)
       @server.accept_new_client("Player 1")
       @server.create_game_if_possible
+      client1.capture_output
       @clients.push(client2)
       @server.accept_new_client("Player 2")
       @game = @server.create_game_if_possible
@@ -92,6 +93,7 @@ describe WarSocketServer do
     end
     
     it "sends waiting for other players message after player1 plays a card" do
+      client1.capture_output
       client1.provide_input("PLAY")
       expect(client1.capture_output.chomp).to eq "Waiting for input from other players"
     end

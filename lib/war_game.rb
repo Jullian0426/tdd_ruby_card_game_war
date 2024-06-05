@@ -3,12 +3,13 @@ require_relative 'war_player'
 
 # TODO: Remove hardcoding for 2 players
 class WarGame
-  attr_accessor :player1, :player2, :deck, :winner, :tied_cards
+  attr_accessor :player1, :player2, :players, :deck, :winner, :tied_cards
 
   def initialize(player1 = WarPlayer.new("Player 1"), player2 = WarPlayer.new("Player 2"), deck = CardDeck.new)
     @player1 = player1
     @player2 = player2
     @deck = deck
+    @players = [player1, player2]
     @winner = nil
     @tied_cards = []
   end
