@@ -25,6 +25,7 @@ describe WarSocketRunner do
     client1.capture_output
     @clients.push(client2)
     @server.accept_new_client('Player 2')
+    client2.capture_output
     @game = @server.create_game_if_possible
     @server.run_game(@game)
   end

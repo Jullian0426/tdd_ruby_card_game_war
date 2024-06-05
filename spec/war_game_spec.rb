@@ -64,7 +64,7 @@ describe 'WarGame' do
       expect(game.players[1].cards.size).to eq 0
     end
 
-    xit 'should declare winner if a player has no cards' do
+    it 'should declare winner if a player has no cards' do
       game.play_round
 
       expect(game.winner).to eq game.players[0]
