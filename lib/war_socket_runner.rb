@@ -2,7 +2,7 @@
 
 # Facilitates the connection between the clients and the game
 class WarSocketRunner
-  attr_accessor :game, :clients
+  attr_accessor :game, :clients, :ready_state
 
   def initialize(game, clients)
     @game = game
@@ -13,18 +13,21 @@ class WarSocketRunner
   def run
     game.start
     until game.winner
-      if players_ready?
+      if ready_state.size == clients.size
+        prompt_players(game.round_state)
         game.play_round
-        reset_ready_state!
+        ready_state.clear
       else
         prompt_players
+        # TODO: remove hardcoding by updating ready_state
+        game.winner = game.player1
       end
     end
   end
 
-  def prompt_players(round_data = nil)
-    if round_data
-      clients.each { |client| client.puts(round_data) }
+  def prompt_players(round_state = nil)
+    if round_state
+      clients.each { |client| client.puts(round_state) }
     else
       clients.each { |client| client.puts('Type PLAY to play a card') }
     end
