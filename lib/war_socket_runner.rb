@@ -20,9 +20,13 @@ class WarSocketRunner
       else
         prompt_players
         # TODO: remove hardcoding by updating ready_state
-        game.winner = game.player1
+        game.winner = game.players[0]
       end
     end
+  end
+
+  def players_ready?
+    input = ''
   end
 
   def prompt_players(round_state = nil)

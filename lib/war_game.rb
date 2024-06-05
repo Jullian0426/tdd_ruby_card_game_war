@@ -5,13 +5,11 @@ require_relative 'war_player'
 
 # Represents a card game of War
 class WarGame
-  attr_accessor :player1, :player2, :players, :deck, :winner, :tied_cards, :round_state
+  attr_accessor :players, :deck, :winner, :tied_cards, :round_state
 
-  def initialize(player1 = WarPlayer.new('Player 1'), player2 = WarPlayer.new('Player 2'), deck = CardDeck.new)
-    @player1 = player1
-    @player2 = player2
+  def initialize(players = [WarPlayer.new('Player 1'), WarPlayer.new('Player 2')], deck = CardDeck.new)
     @deck = deck
-    @players = [player1, player2]
+    @players = players
     @winner = nil
     @tied_cards = []
     @round_state = ""
@@ -20,27 +18,27 @@ class WarGame
   def start
     deck.cards.shuffle!
     until deck.cards_left.zero?
-      player1.take(deck.deal)
-      player2.take(deck.deal)
+      players[0].take(deck.deal)
+      players[1].take(deck.deal)
     end
   end
 
   def play_round
-    p1_card, p2_card = players.map(&:play)
+    played_cards = players.map(&:play)
     self.round_state +=
-      "\nPlayer 1 plays #{p1_card.rank} of #{p1_card.suit}\n
-      Player 2 plays #{p2_card.rank} of #{p2_card.suit}"
-    winning_player = round_winner(p1_card, p2_card)
-    round_handler(winning_player, p1_card, p2_card)
+      "\nPlayer 1 plays #{played_cards[0].rank} of #{played_cards[0].suit}\n
+      Player 2 plays #{played_cards[1].rank} of #{played_cards[1].suit}"
+    winning_player = round_winner(played_cards[0], played_cards[1])
+    round_handler(winning_player, played_cards[0], played_cards[1])
     game_over?
   end
 
   def round_winner(p1_card, p2_card)
     result = p1_card.beat?(p2_card)
     if result == true
-      player1
+      players[0]
     else
-      (result == false ? player2 : :tie)
+      (result == false ? players[1] : :tie)
     end
   end
 
@@ -57,10 +55,10 @@ class WarGame
   end
 
   def game_over?
-    if player1.cards.empty?
-      self.winner = player2
-    elsif player2.cards.empty?
-      self.winner = player1
+    if players[0].cards.empty?
+      self.winner = players[1]
+    elsif players[1].cards.empty?
+      self.winner = players[0]
     end
   end
 end
