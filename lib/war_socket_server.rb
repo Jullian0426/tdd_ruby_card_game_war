@@ -37,17 +37,16 @@ class WarSocketServer
       game = WarGame.new(*pending_clients.values)
       games << game
       pending_clients.clear
-      games.last
+      game
     else
       pending_clients.keys.first.puts('Waiting for more players')
     end
   end
 
   def run_game(game)
-    game.players.each do |player|
-      client = users.key(player)
-      client.puts('Type PLAY to play a card')
-    end
+    clients = game.players.map { |player| users.key(player) }
+    socket_runner = WarSocketRunner.new(game, clients)
+    socket_runner.run
   end
 
   def stop
