@@ -74,8 +74,26 @@ describe WarSocketServer do
   end
 
   describe "#run_game" do
-    xit "tells pending player that they're waiting" do
-      @server.run_game
+    let(:client1) { MockWarSocketClient.new(@server.port_number) }
+    let(:client2) { MockWarSocketClient.new(@server.port_number) }
+    before do
+      @clients.push(client1)
+      @server.accept_new_client("Player 1")
+      @server.create_game_if_possible
+      @clients.push(client2)
+      @server.accept_new_client("Player 2")
+      @game = @server.create_game_if_possible
+      @server.run_game(@game)
+    end
+    
+    it "prompts all players to play a card" do
+      expect(client1.capture_output.chomp).to eq "Type PLAY to play a card"
+      expect(client2.capture_output.chomp).to eq "Type PLAY to play a card"
+    end
+    
+    it "sends waiting for other players message after player1 plays a card" do
+      client1.provide_input("PLAY")
+      expect(client1.capture_output.chomp).to eq "Waiting for input from other players"
     end
   end
 end
