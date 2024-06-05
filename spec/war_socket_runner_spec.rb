@@ -3,6 +3,7 @@
 require_relative '../lib/war_socket_runner'
 require_relative 'war_socket_server_spec'
 
+# TODO: remove dependency on the socket server
 describe WarSocketRunner do
   before(:each) do
     @clients = []
@@ -42,14 +43,17 @@ describe WarSocketRunner do
     @game.players[0].cards = [card1]
     @game.players[1].cards = [card2]
     @game.deck.cards.clear
-    @server.run_game(@game)
+    runner = @server.runner(@game)
+    runner.run_loop
 
     client1.capture_output
     client2.capture_output
     client1.provide_input('PLAY')
     client2.provide_input('PLAY')
 
-    expect(client1.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round."
-    expect(client2.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round."
+    runner.run_loop
+
+    expect(client1.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round.\n"
+    expect(client2.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round.\n"
   end
 end

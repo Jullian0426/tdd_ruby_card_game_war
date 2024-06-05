@@ -44,9 +44,12 @@ class WarSocketServer
   end
 
   def run_game(game)
+    runner(game).run
+  end
+
+  def runner(game)
     clients = game.players.map { |player| users.key(player) }
     socket_runner = WarSocketRunner.new(game, clients)
-    socket_runner.run
   end
 
   def stop

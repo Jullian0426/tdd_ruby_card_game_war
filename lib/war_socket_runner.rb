@@ -12,28 +12,38 @@ class WarSocketRunner
 
   def run
     game.start
-    until game.winner
-      prompt_players
-      sleep(0.1) until players_ready?
-      game.play_round
-      prompt_players(game.round_state)
-      ready_state.clear
-    end
+    run_loop until game.winner
   end
 
   def players_ready?
-    clients.each do |client|
-      input = client.capture_output.chomp
+    (clients - ready_state).each do |client|
+      input = capture_input(client)
       ready_state << client if input == 'PLAY'
     end
     ready_state.length == clients.length
   end
 
-  def prompt_players(round_state = nil)
+  def message_players(round_state = nil)
     if round_state
       clients.each { |client| client.puts(round_state) }
     else
       clients.each { |client| client.puts('Type PLAY to play a card') }
     end
+  end
+
+  def run_loop
+    if players_ready?
+      game.play_round
+      message_players(game.round_state)
+      ready_state.clear
+    else
+      message_players
+    end
+  end
+
+  def capture_input(client)
+    client.read_nonblock(1000).chomp
+  rescue IO::WaitReadable
+    ''
   end
 end
