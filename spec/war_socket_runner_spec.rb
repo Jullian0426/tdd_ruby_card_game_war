@@ -43,6 +43,7 @@ describe WarSocketRunner do
     @game.players[1].cards = [card2]
     @game.deck.cards.clear
     @server.run_game(@game)
+
     client1.capture_output
     client2.capture_output
     client1.provide_input('PLAY')

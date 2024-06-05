@@ -12,7 +12,7 @@ class WarGame
     @players = players
     @winner = nil
     @tied_cards = []
-    @round_state = ""
+    @round_state = ''
   end
 
   def start

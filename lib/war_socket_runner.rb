@@ -13,20 +13,20 @@ class WarSocketRunner
   def run
     game.start
     until game.winner
-      if ready_state.size == clients.size
-        prompt_players(game.round_state)
-        game.play_round
-        ready_state.clear
-      else
-        prompt_players
-        # TODO: remove hardcoding by updating ready_state
-        game.winner = game.players[0]
-      end
+      prompt_players
+      sleep(0.1) until players_ready?
+      game.play_round
+      prompt_players(game.round_state)
+      ready_state.clear
     end
   end
 
   def players_ready?
-    input = ''
+    clients.each do |client|
+      input = client.capture_output.chomp
+      ready_state << client if input == 'PLAY'
+    end
+    ready_state.length == clients.length
   end
 
   def prompt_players(round_state = nil)
