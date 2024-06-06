@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'spec_helper'
 require 'socket'
 require_relative '../lib/war_socket_server'
 

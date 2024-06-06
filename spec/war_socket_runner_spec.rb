@@ -58,4 +58,10 @@ describe WarSocketRunner do
     expect(client1.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round.\n"
     expect(client2.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round.\n"
   end
+  # TODO: test run_loop
+  # both clients connect
+  # call loop
+  # expect prompt for input
+  # call loop
+  # expect output of round + prompt
 end
