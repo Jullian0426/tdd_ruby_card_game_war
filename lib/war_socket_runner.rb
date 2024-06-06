@@ -25,18 +25,19 @@ class WarSocketRunner
     ready_state.length == clients.length
   end
 
-  def message_players(round_state)
-    clients.each { |client| client.puts(round_state) }
+  def message_players(message)
+    clients.each { |client| client.puts(message) }
   end
 
   def run_loop
     if players_ready?
       game.play_round
       message_players(game.round_state)
+      game.round_state = ''
       ready_state.clear
       @clients_sent_messages.clear
     elsif ready_state.empty? && @clients_sent_messages.empty?
-      message_players('Type PLAY to play a card')
+      message_players('Type PLAY to play a card:')
       @clients_sent_messages = clients.dup
     end
   end

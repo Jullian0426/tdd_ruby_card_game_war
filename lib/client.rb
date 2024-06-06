@@ -4,10 +4,11 @@ require 'socket'
 
 # Represents a client that connects to a server using a socket.
 class Client
-  attr_reader :socket, :output
+  attr_reader :socket, :output, :name
 
-  def initialize(port)
+  def initialize(port, name = 'Random Player')
     @socket = TCPSocket.new('localhost', port)
+    @name = name
   end
 
   def provide_input(text)

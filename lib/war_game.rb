@@ -24,7 +24,7 @@ class WarGame
   end
 
   def round_state_message(played_cards)
-    "Player 1 plays #{played_cards[0].rank} of #{played_cards[0].suit}\nPlayer 2 plays #{played_cards[1].rank} of #{played_cards[1].suit}"
+    "#{players[0].name} plays #{played_cards[0].rank} of #{played_cards[0].suit}\n#{players[1].name} plays #{played_cards[1].rank} of #{played_cards[1].suit}"
   end
 
   def play_round
@@ -55,7 +55,7 @@ class WarGame
   def handle_tie(p1_card, p2_card)
     tied_cards << p1_card << p2_card
     self.round_state += "\nIt's a tie! Cards go to tied pool."
-    play_round until game_over?
+    play_round
   end
 
   def handle_round_winner(winning_player, p1_card, p2_card)

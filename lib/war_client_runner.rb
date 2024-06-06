@@ -2,7 +2,13 @@
 
 require_relative 'client'
 
-client = Client.new(3336)
+puts('Type in a port number (3336 by default):')
+port = gets.chomp.to_i
+
+puts('Please enter your name:')
+name = gets.chomp.to_i
+
+client = Client.new(port, name)
 loop do
   output = ''
   output = client.capture_output until output != ''

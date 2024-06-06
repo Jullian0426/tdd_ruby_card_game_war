@@ -24,22 +24,22 @@ describe WarSocketServer do
   end
 
   it 'accepts new clients and starts a game if possible' do
-    client1 = Client.new(@server.port_number)
+    client1 = Client.new(@server.port_number, 'Player 1')
     @clients.push(client1)
-    @server.accept_new_client('Player 1')
+    @server.accept_new_client(client1)
     @server.create_game_if_possible
     expect(@server.games.count).to be 0
-    client2 = Client.new(@server.port_number)
+    client2 = Client.new(@server.port_number, 'Player 2')
     @clients.push(client2)
-    @server.accept_new_client('Player 2')
+    @server.accept_new_client(client2)
     @server.create_game_if_possible
     expect(@server.games.count).to be 1
   end
 
   it 'sends a message indicating a client is not in a game yet' do
-    client1 = Client.new(@server.port_number)
+    client1 = Client.new(@server.port_number, 'Player 1')
     @clients.push(client1)
-    @server.accept_new_client('Player 1')
+    @server.accept_new_client(client1)
     @server.create_game_if_possible
 
     expect(client1.capture_output.chomp).to eq 'Waiting for more players'
