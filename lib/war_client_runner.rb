@@ -2,13 +2,11 @@
 
 require_relative 'client'
 
-client = Client.new
-while true do
-  output = ""
-  until output != ""
-    output = client.capture_output
-  end
-  if output.include?(":")
+client = Client.new(3336)
+loop do
+  output = ''
+  output = client.capture_output until output != ''
+  if output.include?(':')
     print output
     client.provide_input(gets.chomp)
   else

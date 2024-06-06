@@ -1,13 +1,13 @@
-require 'war_socket_server'
+# frozen_string_literal: true
+
+require_relative 'war_socket_server'
 
 server = WarSocketServer.new
 server.start
-while true do
+loop do
   server.accept_new_client
   game = server.create_game_if_possible
-  if game
-    server.run_game(game)
-  end
-rescue
+  server.run_game(game) if game
+  # rescue
   server.stop
 end

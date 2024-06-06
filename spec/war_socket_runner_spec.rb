@@ -17,9 +17,8 @@ describe WarSocketRunner do
     @clients.each(&:close)
   end
 
-  # TODO: Create actual client class
-  let(:client1) { MockWarSocketClient.new(@server.port_number) }
-  let(:client2) { MockWarSocketClient.new(@server.port_number) }
+  let(:client1) { Client.new(@server.port_number) }
+  let(:client2) { Client.new(@server.port_number) }
 
   before do
     @clients.push(client1)
