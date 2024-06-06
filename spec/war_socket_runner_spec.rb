@@ -22,10 +22,10 @@ describe WarSocketRunner do
 
   before do
     @clients.push(client1)
-    @server.accept_new_client(client1)
+    @server.accept_new_client(client1.name)
     client1.capture_output
     @clients.push(client2)
-    @server.accept_new_client(client2)
+    @server.accept_new_client(client2.name)
     @game = @server.create_game_if_possible
   end
 

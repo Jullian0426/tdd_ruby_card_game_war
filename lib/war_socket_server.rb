@@ -25,11 +25,11 @@ class WarSocketServer
     @server = TCPServer.new(port_number)
   end
 
-  def accept_new_client(client)
-    socket = @server.accept_nonblock
-    player = WarPlayer.new(client.name)
-    pending_clients[socket] = player
-    users[socket] = player
+  def accept_new_client(player_name = 'Random Player')
+    client = @server.accept_nonblock
+    player = WarPlayer.new(player_name)
+    pending_clients[client] = player
+    users[client] = player
   rescue IO::WaitReadable, Errno::EINTR
     if accept_message == false
       puts 'No client to accept'
