@@ -14,6 +14,7 @@ class WarSocketServer
     @games = []
     @pending_clients = {}
     @client_messages_sent = {}
+    @accept_message = []
   end
 
   def port_number
@@ -30,7 +31,10 @@ class WarSocketServer
     pending_clients[client] = player
     users[client] = player
   rescue IO::WaitReadable, Errno::EINTR
-    puts 'No client to accept'
+    if @accept_message.empty?
+      puts 'No client to accept'
+      @accept_message << true
+    end
   end
 
   def create_game_if_possible

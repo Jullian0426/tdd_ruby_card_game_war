@@ -8,6 +8,8 @@ loop do
   server.accept_new_client
   game = server.create_game_if_possible
   server.run_game(game) if game
-  # rescue
-  # server.stop
+  begin
+  rescue
+    server.stop
+  end
 end

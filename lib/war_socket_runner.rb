@@ -8,6 +8,7 @@ class WarSocketRunner
     @game = game
     @clients = clients
     @ready_state = []
+    @clients_sent_messages = []
   end
 
   def run
@@ -33,8 +34,10 @@ class WarSocketRunner
       game.play_round
       message_players(game.round_state)
       ready_state.clear
-    elsif ready_state.empty?
+      @clients_sent_messages.clear
+    elsif ready_state.empty? && @clients_sent_messages.empty?
       message_players('Type PLAY to play a card')
+      @clients_sent_messages = clients.dup
     end
   end
 
