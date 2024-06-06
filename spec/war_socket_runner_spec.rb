@@ -4,7 +4,6 @@ require 'spec_helper'
 require_relative '../lib/war_socket_runner'
 require_relative 'war_socket_server_spec'
 
-# TODO: remove dependency on the socket server
 describe WarSocketRunner do
   before(:each) do
     @clients = []
@@ -18,6 +17,7 @@ describe WarSocketRunner do
     @clients.each(&:close)
   end
 
+  # TODO: Create actual client class
   let(:client1) { MockWarSocketClient.new(@server.port_number) }
   let(:client2) { MockWarSocketClient.new(@server.port_number) }
 
@@ -57,11 +57,9 @@ describe WarSocketRunner do
 
     expect(client1.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round.\n"
     expect(client2.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round.\n"
+
+    runner.run
+    expect(client1.capture_output).to include('Player 1 wins the game!') if @game.game_over?
+    expect(client2.capture_output).to include('Player 1 wins the game!') if @game.game_over?
   end
-  # TODO: test run_loop
-  # both clients connect
-  # call loop
-  # expect prompt for input
-  # call loop
-  # expect output of round + prompt
 end

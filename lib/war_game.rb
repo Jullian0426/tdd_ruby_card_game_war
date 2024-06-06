@@ -23,10 +23,13 @@ class WarGame
     end
   end
 
+  def round_state_message(played_cards)
+    "Player 1 plays #{played_cards[0].rank} of #{played_cards[0].suit}\nPlayer 2 plays #{played_cards[1].rank} of #{played_cards[1].suit}"
+  end
+
   def play_round
     played_cards = players.map(&:play)
-    self.round_state +=
-      "Player 1 plays #{played_cards[0].rank} of #{played_cards[0].suit}\nPlayer 2 plays #{played_cards[1].rank} of #{played_cards[1].suit}"
+    self.round_state += round_state_message(played_cards)
     winning_player = round_winner(played_cards[0], played_cards[1])
     round_handler(winning_player, played_cards[0], played_cards[1])
     game_over?
@@ -43,14 +46,22 @@ class WarGame
 
   def round_handler(winning_player, p1_card, p2_card)
     if winning_player == :tie
-      tied_cards << p1_card << p2_card
-      self.round_state += "\nIt's a tie! Cards go to tied pool."
-      play_round until game_over?
+      handle_tie(p1_card, p2_card)
     else
-      winning_player.take([p1_card, p2_card] + tied_cards)
-      tied_cards.clear
-      self.round_state += "\n#{winning_player.name} wins this round."
+      handle_round_winner(winning_player, p1_card, p2_card)
     end
+  end
+
+  def handle_tie(p1_card, p2_card)
+    tied_cards << p1_card << p2_card
+    self.round_state += "\nIt's a tie! Cards go to tied pool."
+    play_round until game_over?
+  end
+
+  def handle_round_winner(winning_player, p1_card, p2_card)
+    winning_player.take([p1_card, p2_card] + tied_cards)
+    tied_cards.clear
+    self.round_state += "\n#{winning_player.name} wins this round."
   end
 
   def game_over?

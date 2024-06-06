@@ -34,10 +34,9 @@ class WarSocketServer
   def create_game_if_possible
     # TODO: change to MIN_PLAYERS variable
     if pending_clients.size >= 2
-      game = WarGame.new(pending_clients.values)
-      games << game
+      games << WarGame.new(pending_clients.values)
       pending_clients.clear
-      game
+      games.last
     else
       pending_clients.keys.first.puts('Waiting for more players')
     end
@@ -49,7 +48,7 @@ class WarSocketServer
 
   def runner(game)
     clients = game.players.map { |player| users.key(player) }
-    socket_runner = WarSocketRunner.new(game, clients)
+    WarSocketRunner.new(game, clients)
   end
 
   def stop

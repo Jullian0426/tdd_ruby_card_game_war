@@ -13,6 +13,7 @@ class WarSocketRunner
   def run
     game.start
     run_loop until game.winner
+    message_players("#{game.winner.name} wins the game!")
   end
 
   def players_ready?
@@ -23,12 +24,8 @@ class WarSocketRunner
     ready_state.length == clients.length
   end
 
-  def message_players(round_state = nil)
-    if round_state
-      clients.each { |client| client.puts(round_state) }
-    else
-      clients.each { |client| client.puts('Type PLAY to play a card') }
-    end
+  def message_players(round_state)
+    clients.each { |client| client.puts(round_state) }
   end
 
   def run_loop
@@ -36,8 +33,8 @@ class WarSocketRunner
       game.play_round
       message_players(game.round_state)
       ready_state.clear
-    else
-      message_players
+    elsif ready_state.empty?
+      message_players('Type PLAY to play a card')
     end
   end
 
