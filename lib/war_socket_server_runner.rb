@@ -9,5 +9,5 @@ loop do
   game = server.create_game_if_possible
   server.run_game(game) if game
   # rescue
-  server.stop
+  # server.stop
 end

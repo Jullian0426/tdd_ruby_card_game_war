@@ -3,6 +3,7 @@
 require 'socket'
 require_relative 'war_game'
 require_relative 'war_player'
+require_relative 'war_socket_runner'
 
 # The WarSocketServer class represents a socket server for the War card game.
 class WarSocketServer
@@ -12,6 +13,7 @@ class WarSocketServer
     @users = {}
     @games = []
     @pending_clients = {}
+    @client_messages_sent = {}
   end
 
   def port_number
@@ -37,8 +39,13 @@ class WarSocketServer
       games << WarGame.new(pending_clients.values)
       pending_clients.clear
       games.last
-    else
-      pending_clients.keys.first.puts('Waiting for more players')
+    elsif pending_clients.size == 1
+      client = pending_clients.keys.first
+      unless @client_messages_sent[client]
+        client.puts('Waiting for more players')
+        @client_messages_sent[client] = true
+      end
+      nil
     end
   end
 
