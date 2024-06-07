@@ -63,7 +63,7 @@ class WarSocketServer
     elsif pending_clients.size == 1
       client = pending_clients.keys.first
       unless client_messages_sent[client]
-        client.puts('Waiting for more players')
+        client.puts('Waiting for more players...')
         client_messages_sent[client] = true
       end
       nil

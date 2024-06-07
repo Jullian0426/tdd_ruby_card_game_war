@@ -22,10 +22,16 @@ describe WarSocketRunner do
 
   before do
     @clients.push(client1)
-    @server.accept_new_client('Player 1')
+    @server.accept_new_client
     client1.capture_output
+    client1.provide_input('Player 1')
+    @server.new_player
     @clients.push(client2)
-    @server.accept_new_client('Player 2')
+    @server.accept_new_client
+    client2.provide_input('Player 2')
+    @server.new_player
+    client1.capture_output
+    client2.capture_output
     @game = @server.create_game_if_possible
   end
 
@@ -33,8 +39,8 @@ describe WarSocketRunner do
     runner = @server.runner(@game)
     runner.run_loop
 
-    expect(client1.capture_output.chomp).to eq 'Type PLAY to play a card:'
-    expect(client2.capture_output.chomp).to eq 'Type PLAY to play a card:'
+    expect(client1.capture_output.chomp).to eq 'Type "play" to play a card:'
+    expect(client2.capture_output.chomp).to eq 'Type "play" to play a card:'
   end
 
   it 'sends game data to the clients after a round is played' do
@@ -58,8 +64,8 @@ describe WarSocketRunner do
     expect(client2.capture_output).to eq "Player 1 plays 10 of H\nPlayer 2 plays 8 of D\nPlayer 1 wins this round.\n"
 
     runner.run
+
     expect(client1.capture_output.chomp).to eq 'Player 1 wins the game!'
     expect(client2.capture_output.chomp).to eq 'Player 1 wins the game!'
   end
 end
-

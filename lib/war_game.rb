@@ -54,7 +54,7 @@ class WarGame
 
   def handle_tie(p1_card, p2_card)
     tied_cards << p1_card << p2_card
-    self.round_state += "\nIt's a tie! Cards go to tied pool."
+    self.round_state += "\nIt's a tie! Cards go to tied pool.\n"
     play_round
   end
 
