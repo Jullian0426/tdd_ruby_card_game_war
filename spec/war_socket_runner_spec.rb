@@ -17,15 +17,15 @@ describe WarSocketRunner do
     @clients.each(&:close)
   end
 
-  let(:client1) { Client.new(@server.port_number, 'Player 1') }
-  let(:client2) { Client.new(@server.port_number, 'Player 2') }
+  let(:client1) { Client.new(@server.port_number) }
+  let(:client2) { Client.new(@server.port_number) }
 
   before do
     @clients.push(client1)
-    @server.accept_new_client(client1.name)
+    @server.accept_new_client('Player 1')
     client1.capture_output
     @clients.push(client2)
-    @server.accept_new_client(client2.name)
+    @server.accept_new_client('Player 2')
     @game = @server.create_game_if_possible
   end
 

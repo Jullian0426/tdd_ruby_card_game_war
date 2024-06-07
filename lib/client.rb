@@ -6,9 +6,8 @@ require 'socket'
 class Client
   attr_reader :socket, :output, :name
 
-  def initialize(port, name = 'Random Player')
+  def initialize(port)
     @socket = TCPSocket.new('localhost', port)
-    @name = name
   end
 
   def provide_input(text)

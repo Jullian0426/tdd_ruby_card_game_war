@@ -7,11 +7,12 @@ require_relative 'war_socket_runner'
 
 # The WarSocketServer class represents a socket server for the War card game.
 class WarSocketServer
-  attr_accessor :users, :games, :pending_clients, :client_messages_sent, :accept_message
+  attr_accessor :users, :games, :pending_clients, :client_messages_sent, :accept_message, :unnamed_clients
 
   def initialize
     @users = {}
     @games = []
+    @unnamed_clients = []
     @pending_clients = {}
     @client_messages_sent = {}
     @accept_message = false
@@ -25,16 +26,32 @@ class WarSocketServer
     @server = TCPServer.new(port_number)
   end
 
-  def accept_new_client(player_name = 'Random Player')
+  def accept_new_client
     client = @server.accept_nonblock
-    player = WarPlayer.new(player_name)
-    pending_clients[client] = player
-    users[client] = player
+    unnamed_clients << client
   rescue IO::WaitReadable, Errno::EINTR
     if accept_message == false
       puts 'No client to accept'
       self.accept_message = true
     end
+  end
+
+  def new_player
+    client = unnamed_clients.last
+    return unless client
+
+    name = name?(client)
+    return unless name != ''
+
+    player = WarPlayer.new(name)
+    pending_clients[client] = player
+    users[client] = player
+  end
+
+  def name?(client)
+    unnamed_clients.delete(client)
+    client.puts('Please enter your name:')
+    client.gets.chomp
   end
 
   def create_game_if_possible
