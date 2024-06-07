@@ -15,12 +15,13 @@ class WarSocketRunner
     game.start
     run_loop until game.winner
     message_players("#{game.winner.name} wins the game!")
+    clients.each(&:close)
   end
 
   def players_ready?
     (clients - ready_state).each do |client|
       input = capture_input(client)
-      ready_state << client if input == 'PLAY'
+      ready_state << client if input == 'play'
     end
     ready_state.length == clients.length
   end
@@ -37,7 +38,7 @@ class WarSocketRunner
       ready_state.clear
       @clients_sent_messages.clear
     elsif ready_state.empty? && @clients_sent_messages.empty?
-      message_players('Type PLAY to play a card:')
+      message_players('Type "play" to play a card:')
       @clients_sent_messages = clients.dup
     end
   end

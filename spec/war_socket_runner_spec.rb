@@ -49,8 +49,8 @@ describe WarSocketRunner do
 
     client1.capture_output
     client2.capture_output
-    client1.provide_input('PLAY')
-    client2.provide_input('PLAY')
+    client1.provide_input('play')
+    client2.provide_input('play')
 
     runner.run_loop
 
@@ -62,3 +62,4 @@ describe WarSocketRunner do
     expect(client2.capture_output.chomp).to eq 'Player 1 wins the game!'
   end
 end
+
